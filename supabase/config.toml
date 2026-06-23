@@ -1,0 +1,10 @@
+project_id = "ljamuqzvswmtlvvwsopa"
+
+[functions.chat]
+verify_jwt = false
+
+[functions.analyze-damage]
+verify_jwt = false
+
+[functions.ai-predictions]
+verify_jwt = false
