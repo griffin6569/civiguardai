@@ -6,6 +6,8 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   isAdmin: boolean;
+  isOrgMember: boolean;
+  organizationId: string | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signUp: (email: string, password: string) => Promise<{ error: any; needsEmailConfirmation: boolean }>;
@@ -25,16 +27,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isOrgMember, setIsOrgMember] = useState(false);
+  const [organizationId, setOrganizationId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const checkRole = async (userId: string) => {
-    const { data } = await supabase
+  const checkRoleAndOrg = async (userId: string) => {
+    // Check admin role
+    const { data: adminData } = await supabase
       .from("user_roles" as any)
       .select("role")
       .eq("user_id", userId)
       .eq("role", "admin")
       .maybeSingle();
-    setIsAdmin(!!data);
+    setIsAdmin(!!adminData);
+
+    // Check organization membership
+    const { data: orgData } = await supabase
+      .from("organization_members" as any)
+      .select("organization_id")
+      .eq("user_id", userId)
+      .maybeSingle();
+    
+    if (orgData) {
+      setIsOrgMember(true);
+      setOrganizationId(orgData.organization_id);
+    } else {
+      setIsOrgMember(false);
+      setOrganizationId(null);
+    }
   };
 
   useEffect(() => {
@@ -43,9 +63,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
-          setTimeout(() => checkRole(session.user.id), 0);
+          setTimeout(() => checkRoleAndOrg(session.user.id), 0);
         } else {
           setIsAdmin(false);
+          setIsOrgMember(false);
+          setOrganizationId(null);
         }
         setIsLoading(false);
       }
@@ -55,7 +77,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        checkRole(session.user.id);
+        checkRoleAndOrg(session.user.id);
+      } else {
+        setIsAdmin(false);
+        setIsOrgMember(false);
+        setOrganizationId(null);
       }
       setIsLoading(false);
     });
@@ -98,10 +124,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signOut = async () => {
     await supabase.auth.signOut();
     setIsAdmin(false);
+    setIsOrgMember(false);
+    setOrganizationId(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, isAdmin, isLoading, signIn, signUp, resendConfirmation, signOut }}>
+    <AuthContext.Provider value={{ user, session, isAdmin, isOrgMember, organizationId, isLoading, signIn, signUp, resendConfirmation, signOut }}>
       {children}
     </AuthContext.Provider>
   );

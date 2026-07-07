@@ -272,6 +272,62 @@ export type Database = {
         }
         Relationships: []
       }
+      organization_members: {
+        Row: {
+          created_at: string
+          id: string
+          organization_id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          organization_id: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          organization_id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizations: {
+        Row: {
+          contact_email: string | null
+          created_at: string
+          id: string
+          name: string
+          type: string
+        }
+        Insert: {
+          contact_email?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          type: string
+        }
+        Update: {
+          contact_email?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          type?: string
+        }
+        Relationships: []
+      }
       notification_subscriptions: {
         Row: {
           category: string | null
@@ -440,6 +496,7 @@ export type Database = {
           latitude: number
           longitude: number
           needs_human_review: boolean | null
+          organization_id: string | null
           people_affected: number | null
           priority_score: number | null
           reporter_email: string | null
@@ -476,7 +533,8 @@ export type Database = {
           inspection_notes?: string | null
           latitude: number
           longitude: number
-          needs_human_review?: boolean | null
+          needs_human_review: boolean | null
+          organization_id?: string | null
           people_affected?: number | null
           priority_score?: number | null
           reporter_email?: string | null
@@ -514,6 +572,7 @@ export type Database = {
           latitude?: number
           longitude?: number
           needs_human_review?: boolean | null
+          organization_id?: string | null
           people_affected?: number | null
           priority_score?: number | null
           reporter_email?: string | null
@@ -542,6 +601,13 @@ export type Database = {
             columns: ["duplicate_of"]
             isOneToOne: false
             referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]

@@ -14,6 +14,8 @@ import AdminDashboardPage from "./pages/AdminDashboardPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import DocsPage from "./pages/DocsPage.tsx";
 import AuthCallbackPage from "./pages/AuthCallbackPage.tsx";
+import OrgRegisterPage from "./pages/OrgRegisterPage.tsx";
+import OrgDashboardPage from "./pages/OrgDashboardPage.tsx";
 import Chatbot from "./components/Chatbot.tsx";
 import OfflineBanner from "./components/OfflineBanner.tsx";
 import PwaInstallBanner from "./components/PwaInstallBanner.tsx";
@@ -39,10 +41,19 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const ProtectedOrgRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, isOrgMember, isLoading } = useAuth();
+  if (isLoading) return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>;
+  if (!user) return <Navigate to="/login" />;
+  if (!isOrgMember) return <Navigate to="/dashboard" />;
+  return <>{children}</>;
+};
+
 const AuthRedirect = () => {
-  const { user, isAdmin, isLoading } = useAuth();
+  const { user, isAdmin, isOrgMember, isLoading } = useAuth();
   if (isLoading) return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>;
   if (user && isAdmin) return <Navigate to="/admin" />;
+  if (user && isOrgMember) return <Navigate to="/org-dashboard" />;
   if (user) return <Navigate to="/dashboard" />;
   return <LoginPage />;
 };
@@ -74,6 +85,8 @@ const App = () => (
             <Route path="/reports" element={<ReportsListPage />} />
             <Route path="/map" element={<MapPage />} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+            <Route path="/org-dashboard" element={<ProtectedOrgRoute><OrgDashboardPage /></ProtectedOrgRoute>} />
+            <Route path="/register-organization" element={<ProtectedRoute><OrgRegisterPage /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboardPage /></ProtectedAdminRoute>} />
             <Route path="/docs" element={<DocsPage />} />
             <Route path="*" element={<NotFound />} />

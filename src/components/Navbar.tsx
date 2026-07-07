@@ -4,14 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 const Navbar = () => {
-  const { user, isAdmin, signOut } = useAuth();
+  const { user, isAdmin, isOrgMember, signOut } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = [
     { to: "/map", label: "Live Map" },
     ...(user && isAdmin ? [{ to: "/admin", label: "Admin Panel" }] : []),
-    ...(user && !isAdmin ? [{ to: "/dashboard", label: "Dashboard" }] : []),
+    ...(user && isOrgMember ? [{ to: "/org-dashboard", label: "Org Dashboard" }] : []),
+    ...(user && !isAdmin && !isOrgMember ? [{ to: "/dashboard", label: "Dashboard" }] : []),
+    ...(user && !isAdmin && !isOrgMember ? [{ to: "/register-organization", label: "Register Authority" }] : []),
     { to: "/reports", label: "Reports" },
   ];
 

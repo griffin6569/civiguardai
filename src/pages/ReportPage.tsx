@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Camera, MapPin, Send, ArrowLeft, Upload, X, Loader2, Navigation, WifiOff, Save, AlertTriangle, Brain, Eye, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -169,6 +170,7 @@ const ReportPage = () => {
     latitude: -1.2921,
     longitude: 36.8219,
     address: "",
+    organization_id: "",
   });
 
   useEffect(() => {
@@ -201,6 +203,15 @@ const ReportPage = () => {
     window.addEventListener("offline", handleOffline);
     return () => { window.removeEventListener("online", handleOnline); window.removeEventListener("offline", handleOffline); };
   }, [searchParams]);
+
+  const { data: organizations } = useQuery({
+    queryKey: ["organizations"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("organizations" as any).select("*").order("name");
+      if (error) throw error;
+      return data || [];
+    },
+  });
 
   const processImageFile = useCallback(async (file: File) => {
     setImageFile(file);
@@ -398,6 +409,7 @@ const ReportPage = () => {
       ai_confidence: aiAnalysis?.confidence || 0,
       needs_human_review: aiAnalysis?.needs_human_review || (aiAnalysis?.confidence && aiAnalysis.confidence < 60),
       assigned_agency: authoritySummary,
+      organization_id: form.organization_id || null,
       user_id: user?.id || null,
     };
 
@@ -667,6 +679,26 @@ const ReportPage = () => {
                 }}
               />
             )}
+
+            {/* Destination Authority */}
+            <div className="rounded-xl border border-glow bg-card/50 p-6 space-y-4">
+              <label className="text-sm font-heading font-semibold text-foreground mb-1.5 block">Destination Authority (Optional)</label>
+              <p className="text-[11px] text-muted-foreground mb-3">
+                If you know the specific authority responsible, you can select them directly to route your report to their dashboard.
+              </p>
+              <select
+                value={form.organization_id}
+                onChange={(e) => setForm({ ...form, organization_id: e.target.value })}
+                className="w-full px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none"
+              >
+                <option value="">Let AI route automatically...</option>
+                {organizations?.map((org) => (
+                  <option key={org.id} value={org.id}>
+                    {org.name} ({org.type})
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* Contact */}
             <div className="rounded-xl border border-glow bg-card/50 p-6 space-y-4">
