@@ -19,11 +19,11 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between h-14 md:h-16">
         <Link to="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-          <Shield className="w-5 h-5 md:w-6 md:h-6 text-primary" />
-          <span className="font-heading font-bold text-base md:text-lg text-foreground">CiviGuard AI</span>
+          <Shield className="w-5 h-5 md:w-6 md:h-6 text-cyan-400" />
+          <span className="font-heading font-bold text-base md:text-lg text-white">CiviGuard <span className="text-cyan-400">AI</span></span>
         </Link>
 
         {/* Desktop nav */}
