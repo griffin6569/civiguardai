@@ -57,6 +57,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const handleClaimReport = async (userId: string) => {
+    const claimReportId = localStorage.getItem("claim_report_id");
+    if (claimReportId) {
+      const { error } = await supabase.from("reports").update({ user_id: userId, is_guest_report: false }).eq("tracking_id", claimReportId);
+      if (!error) {
+        localStorage.removeItem("claim_report_id");
+      }
+    }
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
@@ -64,6 +74,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(session?.user ?? null);
         if (session?.user) {
           setTimeout(() => checkRoleAndOrg(session.user.id), 0);
+          handleClaimReport(session.user.id);
         } else {
           setIsAdmin(false);
           setIsOrgMember(false);
@@ -78,6 +89,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
         checkRoleAndOrg(session.user.id);
+        handleClaimReport(session.user.id);
       } else {
         setIsAdmin(false);
         setIsOrgMember(false);

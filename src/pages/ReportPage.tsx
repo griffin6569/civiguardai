@@ -140,7 +140,8 @@ const ReportPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
+  const [showGuestForm, setShowGuestForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -395,23 +396,49 @@ const ReportPage = () => {
       severity: aiAnalysis?.severity || "unknown",
     });
     const authoritySummary = summarizeAuthorityRoutes(authorityRoutes);
-    const reportPayload = {
-      title: form.title,
-      description: form.description,
-      damage_type: form.damage_type,
-      severity: aiAnalysis?.severity || "unknown",
-      reporter_name: form.reporter_name || null,
-      reporter_email: form.reporter_email || null,
-      latitude: form.latitude,
-      longitude: form.longitude,
-      address: form.address || null,
-      ai_analysis: aiAnalysis || null,
-      ai_confidence: aiAnalysis?.confidence || 0,
-      needs_human_review: aiAnalysis?.needs_human_review || (aiAnalysis?.confidence && aiAnalysis.confidence < 60),
-      assigned_agency: authoritySummary,
-      organization_id: form.organization_id || null,
-      user_id: user?.id || null,
-    };
+      // Add AI Spam Check
+      let spamRiskScore = 0;
+      try {
+        const { data: spamData, error: spamError } = await supabase.functions.invoke("check-spam-risk", {
+          body: {
+            title: form.title,
+            description: form.description,
+            damage_type: form.damage_type,
+            reporter_name: form.reporter_name,
+          }
+        });
+        
+        if (!spamError && spamData) {
+          spamRiskScore = spamData.spam_score;
+          if (spamData.is_spam) {
+            toast({ title: "Submission Blocked", description: "This report has been flagged as spam.", variant: "destructive" });
+            setIsSubmitting(false);
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Spam check failed", e);
+      }
+
+      const reportPayload = {
+        title: form.title,
+        description: form.description,
+        damage_type: form.damage_type,
+        severity: aiAnalysis?.severity || "unknown",
+        reporter_name: form.reporter_name || null,
+        reporter_email: form.reporter_email || null,
+        latitude: form.latitude,
+        longitude: form.longitude,
+        address: form.address || null,
+        ai_analysis: aiAnalysis || null,
+        ai_confidence: aiAnalysis?.confidence || 0,
+        needs_human_review: aiAnalysis?.needs_human_review || (aiAnalysis?.confidence && aiAnalysis.confidence < 60),
+        assigned_agency: authoritySummary,
+        organization_id: form.organization_id || null,
+        user_id: user?.id || null,
+        is_guest_report: !user,
+        spam_risk_score: spamRiskScore,
+      };
 
     // Offline fallback
     if (!online) {
@@ -443,14 +470,14 @@ const ReportPage = () => {
       const { data: insertedReport, error } = await supabase.from("reports").insert({
         ...reportPayload,
         image_url,
-      } as any).select("id, created_at").single();
+      } as any).select("id, created_at, tracking_id").single();
       if (error) throw error;
 
       toast({
-        title: `Report submitted: ${getReportReference(insertedReport)}`,
+        title: `Report submitted successfully!`,
         description: `Suggested routing: ${authoritySummary}`,
       });
-      navigate("/reports");
+      navigate(`/report-success/${insertedReport.tracking_id}`);
     } catch {
       // If online submit fails, queue offline
       await addToSyncQueue({
@@ -468,6 +495,35 @@ const ReportPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (authLoading) {
+    return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>;
+  }
+
+  if (!user && !showGuestForm) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center container mx-auto px-4 pt-24 pb-16 max-w-lg text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full">
+            <Camera className="w-16 h-16 text-primary mx-auto mb-6" />
+            <h1 className="text-3xl font-heading font-bold mb-4">Report an Issue</h1>
+            <p className="text-muted-foreground mb-8 text-sm">
+              You can continue as a guest to report an emergency immediately, or sign in to track your report's progress and build credibility.
+            </p>
+            <div className="space-y-4">
+              <button onClick={() => navigate("/login")} className="w-full px-6 py-4 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-lg glow-primary hover:brightness-110 transition-all flex items-center justify-center gap-2">
+                Sign In to Report
+              </button>
+              <button onClick={() => setShowGuestForm(true)} className="w-full px-6 py-4 rounded-xl bg-secondary text-foreground font-heading font-medium text-lg border border-border hover:bg-secondary/80 transition-all">
+                Continue as Guest
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

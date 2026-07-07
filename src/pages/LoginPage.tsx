@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Shield, LogIn, UserPlus, Loader2, Mail, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,7 +12,15 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const claimReportId = searchParams.get("claim_report");
+
+  useEffect(() => {
+    if (claimReportId) {
+      localStorage.setItem("claim_report_id", claimReportId);
+    }
+  }, [claimReportId]);
+
   const [pendingConfirmationEmail, setPendingConfirmationEmail] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {

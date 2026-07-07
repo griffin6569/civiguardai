@@ -7,6 +7,8 @@ import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import ReportPage from "./pages/ReportPage.tsx";
+import ReportSuccessPage from "./pages/ReportSuccessPage.tsx";
+import TrackReportPage from "./pages/TrackReportPage.tsx";
 import ReportsListPage from "./pages/ReportsListPage.tsx";
 import MapPage from "./pages/MapPage.tsx";
 import DashboardPage from "./pages/DashboardPage.tsx";
@@ -83,7 +85,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<AuthRedirect />} />
             <Route path="/auth/callback" element={<AuthCallbackPage />} />
-            <Route path="/report" element={<ProtectedRoute><ReportPage /></ProtectedRoute>} />
+            <Route path="/report" element={<ReportPage />} />
+            <Route path="/report-success/:trackingId" element={<ReportSuccessPage />} />
+            <Route path="/track-report" element={<TrackReportPage />} />
             <Route path="/reports" element={<ReportsListPage />} />
             <Route path="/map" element={<MapPage />} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />

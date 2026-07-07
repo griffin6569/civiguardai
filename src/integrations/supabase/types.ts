@@ -511,6 +511,12 @@ export type Database = {
           user_id: string | null
           verified_at: string | null
           verified_by: string | null
+          device_identifier: string | null
+          guest_phone: string | null
+          is_duplicate: boolean | null
+          is_guest_report: boolean | null
+          spam_risk_score: number | null
+          tracking_id: string | null
         }
         Insert: {
           address?: string | null
@@ -549,6 +555,12 @@ export type Database = {
           user_id?: string | null
           verified_at?: string | null
           verified_by?: string | null
+          device_identifier?: string | null
+          guest_phone?: string | null
+          is_duplicate?: boolean | null
+          is_guest_report?: boolean | null
+          spam_risk_score?: number | null
+          tracking_id?: string | null
         }
         Update: {
           address?: string | null
@@ -587,6 +599,12 @@ export type Database = {
           user_id?: string | null
           verified_at?: string | null
           verified_by?: string | null
+          device_identifier?: string | null
+          guest_phone?: string | null
+          is_duplicate?: boolean | null
+          is_guest_report?: boolean | null
+          spam_risk_score?: number | null
+          tracking_id?: string | null
         }
         Relationships: [
           {
@@ -626,6 +644,30 @@ export type Database = {
         Update: {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_credibility: {
+        Row: {
+          created_at: string
+          rank: string
+          score: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          rank?: string
+          score?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          rank?: string
+          score?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: []

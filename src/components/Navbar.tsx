@@ -14,6 +14,7 @@ const Navbar = () => {
     ...(user && isOrgMember ? [{ to: "/org-dashboard", label: "Org Dashboard" }] : []),
     ...(user && !isAdmin && !isOrgMember ? [{ to: "/dashboard", label: "Dashboard" }] : []),
     ...(user && !isAdmin && !isOrgMember ? [{ to: "/register-organization", label: "Register Authority" }] : []),
+    { to: "/track-report", label: "Track Report" },
     { to: "/reports", label: "Reports" },
   ];
 

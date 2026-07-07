@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BarChart3, MapPin, Newspaper, Shield, Users, Zap } from "lucide-react";
+import { BarChart3, MapPin, Newspaper, Shield, Users, Zap, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const kenyaImpact = [
@@ -67,22 +67,22 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
         >
-          <Link to="/dashboard" className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-heading font-semibold text-lg glow-primary hover:brightness-110 transition-all">
+          <Link to="/report" className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-heading font-semibold text-lg glow-primary hover:brightness-110 transition-all">
             <span className="flex items-center gap-2">
               <Zap className="w-5 h-5" />
-              Launch Dashboard
+              Report an Issue
             </span>
           </Link>
-          <Link to="/map" className="px-8 py-3.5 rounded-lg border border-glow bg-secondary/30 text-foreground font-heading font-medium text-lg hover:bg-secondary/60 transition-all backdrop-blur-sm">
+          <Link to="/track-report" className="px-8 py-3.5 rounded-lg border border-glow bg-secondary/30 text-foreground font-heading font-medium text-lg hover:bg-secondary/60 transition-all backdrop-blur-sm">
             <span className="flex items-center gap-2">
               <BarChart3 className="w-5 h-5" />
-              View Evidence Map
+              Track a Report
             </span>
           </Link>
-          <Link to="/register-organization" className="px-8 py-3.5 rounded-lg border border-primary/50 bg-primary/10 text-primary font-heading font-medium text-lg hover:bg-primary/20 transition-all backdrop-blur-sm">
+          <Link to="/map" className="px-8 py-3.5 rounded-lg border border-primary/50 bg-primary/10 text-primary font-heading font-medium text-lg hover:bg-primary/20 transition-all backdrop-blur-sm hidden md:flex">
             <span className="flex items-center gap-2">
-              <Shield className="w-5 h-5" />
-              Register Authority
+              <MapPin className="w-5 h-5" />
+              View Map
             </span>
           </Link>
         </motion.div>
