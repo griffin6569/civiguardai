@@ -21,6 +21,7 @@ import OfflineBanner from "./components/OfflineBanner.tsx";
 import PwaInstallBanner from "./components/PwaInstallBanner.tsx";
 import { Loader2 } from "lucide-react";
 import { startAutoSync } from "./lib/syncEngine";
+import MobileBottomNav from "./components/MobileBottomNav.tsx";
 
 // Start auto-sync engine
 startAutoSync();
@@ -66,6 +67,7 @@ const GlobalAssistants = () => {
       {user ? <Chatbot /> : null}
       <PwaInstallBanner />
       <OfflineBanner />
+      <MobileBottomNav />
     </>
   );
 };

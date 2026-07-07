@@ -35,7 +35,7 @@ const OrgRegisterPage = () => {
     setIsSubmitting(true);
     try {
       // Create the organization
-      const { data: orgData, error: orgError } = await supabase
+      const { data: orgData, error: orgError } = await (supabase
         .from("organizations" as any)
         .insert({
           name: form.name,
@@ -43,7 +43,7 @@ const OrgRegisterPage = () => {
           contact_email: form.contact_email || null,
         })
         .select()
-        .single();
+        .single() as any);
 
       if (orgError) throw orgError;
 

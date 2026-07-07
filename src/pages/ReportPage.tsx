@@ -635,18 +635,18 @@ const ReportPage = () => {
             <div className="rounded-xl border border-glow bg-card/50 p-6 space-y-4">
               <div>
                 <label className="text-sm font-heading font-semibold text-foreground mb-1.5 block">Damage Type *</label>
-                <select value={form.damage_type} onChange={(e) => setForm({ ...form, damage_type: e.target.value })} className="w-full px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none">
+                <select value={form.damage_type} onChange={(e) => setForm({ ...form, damage_type: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-secondary border border-border text-foreground text-base focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none">
                   <option value="">Select type...</option>
                   {damageTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
               </div>
               <div>
                 <label className="text-sm font-heading font-semibold text-foreground mb-1.5 block">Title *</label>
-                <input type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Brief description of the issue" className="w-full px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none placeholder:text-muted-foreground" />
+                <input type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Brief description of the issue" className="w-full px-3 py-3 rounded-xl bg-secondary border border-border text-foreground text-base focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none placeholder:text-muted-foreground" />
               </div>
               <div>
                 <label className="text-sm font-heading font-semibold text-foreground mb-1.5 block">Description *</label>
-                <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} placeholder="Describe the damage, location details, and any safety concerns..." className="w-full px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none resize-none placeholder:text-muted-foreground" />
+                <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} placeholder="Describe the damage, location details, and any safety concerns..." className="w-full px-3 py-3 rounded-xl bg-secondary border border-border text-foreground text-base focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none resize-none placeholder:text-muted-foreground" />
               </div>
             </div>
 
@@ -664,10 +664,10 @@ const ReportPage = () => {
                   <p className="text-sm text-foreground">{form.address}</p>
                 </div>
               )}
-              <input type="text" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Street address or landmark" className="w-full px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none placeholder:text-muted-foreground" />
+              <input type="text" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Street address or landmark" className="w-full px-3 py-3 rounded-xl bg-secondary border border-border text-foreground text-base focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none placeholder:text-muted-foreground" />
               <div className="grid grid-cols-2 gap-3">
-                <input type="number" step="any" value={form.latitude} onChange={(e) => setForm({ ...form, latitude: parseFloat(e.target.value) })} placeholder="Latitude" className="px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none" />
-                <input type="number" step="any" value={form.longitude} onChange={(e) => setForm({ ...form, longitude: parseFloat(e.target.value) })} placeholder="Longitude" className="px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none" />
+                <input type="number" step="any" value={form.latitude} onChange={(e) => setForm({ ...form, latitude: parseFloat(e.target.value) })} placeholder="Latitude" className="px-3 py-3 rounded-xl bg-secondary border border-border text-foreground text-base focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none" />
+                <input type="number" step="any" value={form.longitude} onChange={(e) => setForm({ ...form, longitude: parseFloat(e.target.value) })} placeholder="Longitude" className="px-3 py-3 rounded-xl bg-secondary border border-border text-foreground text-base focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none" />
               </div>
             </div>
 
@@ -689,7 +689,7 @@ const ReportPage = () => {
               <select
                 value={form.organization_id}
                 onChange={(e) => setForm({ ...form, organization_id: e.target.value })}
-                className="w-full px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none"
+                className="w-full px-3 py-3 rounded-xl bg-secondary border border-border text-foreground text-base focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none"
               >
                 <option value="">Let AI route automatically...</option>
                 {organizations?.map((org) => (
@@ -707,8 +707,8 @@ const ReportPage = () => {
                 Your name and email are optional. You can submit anonymously.
               </p>
               <div className="grid grid-cols-2 gap-3">
-                <input type="text" value={form.reporter_name} onChange={(e) => setForm({ ...form, reporter_name: e.target.value })} placeholder="Name" className="px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none placeholder:text-muted-foreground" />
-                <input type="email" value={form.reporter_email} onChange={(e) => setForm({ ...form, reporter_email: e.target.value })} placeholder="Email" className="px-3 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none placeholder:text-muted-foreground" />
+                <input type="text" value={form.reporter_name} onChange={(e) => setForm({ ...form, reporter_name: e.target.value })} placeholder="Name" className="px-3 py-3 rounded-xl bg-secondary border border-border text-foreground text-base focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none placeholder:text-muted-foreground" />
+                <input type="email" value={form.reporter_email} onChange={(e) => setForm({ ...form, reporter_email: e.target.value })} placeholder="Email" className="px-3 py-3 rounded-xl bg-secondary border border-border text-foreground text-base focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none placeholder:text-muted-foreground" />
               </div>
             </div>
 
@@ -727,14 +727,14 @@ const ReportPage = () => {
             )}
 
             {/* Actions */}
-            <div className="flex gap-3">
+            <div className="sticky bottom-[70px] md:static bg-background/95 md:bg-transparent backdrop-blur-md p-4 md:p-0 -mx-4 md:mx-0 border-t border-border md:border-none z-40 flex gap-3 shadow-[0_-10px_20px_rgba(0,0,0,0.2)] md:shadow-none mt-8 md:mt-0">
               {!online && (
-                <button type="button" onClick={saveOfflineDraft} className="px-4 py-3 rounded-lg bg-secondary text-foreground font-heading font-medium text-sm hover:bg-secondary/80 transition-all flex items-center gap-2">
-                  <Save className="w-4 h-4" /> Save Draft
+                <button type="button" onClick={saveOfflineDraft} className="px-4 py-3.5 rounded-xl bg-secondary text-foreground font-heading font-medium text-base hover:bg-secondary/80 transition-all flex items-center gap-2">
+                  <Save className="w-5 h-5" /> Draft
                 </button>
               )}
-              <button type="submit" disabled={isSubmitting || isCheckingDuplicates} className="flex-1 px-6 py-3.5 rounded-lg bg-primary text-primary-foreground font-heading font-semibold text-lg glow-primary hover:brightness-110 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-                {isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" /> Submitting...</> : isCheckingDuplicates ? <><Loader2 className="w-5 h-5 animate-spin" /> Checking...</> : <><Send className="w-5 h-5" /> {online ? "Submit Report" : "Queue Offline"}</>}
+              <button type="submit" disabled={isSubmitting || isCheckingDuplicates} className="flex-1 px-6 py-4 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-lg glow-primary hover:brightness-110 transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-xl shadow-primary/30">
+                {isSubmitting ? <><Loader2 className="w-6 h-6 animate-spin" /> Submitting...</> : isCheckingDuplicates ? <><Loader2 className="w-6 h-6 animate-spin" /> Checking...</> : <><Send className="w-6 h-6" /> {online ? "Submit Report" : "Queue Offline"}</>}
               </button>
             </div>
           </form>

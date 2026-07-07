@@ -33,7 +33,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <Link to="/report" className="px-3 md:px-4 py-2 rounded-lg bg-primary text-primary-foreground font-heading font-medium text-xs md:text-sm hover:brightness-110 transition-all">
+          <Link to="/report" className="hidden md:flex px-3 md:px-4 py-2 rounded-lg bg-primary text-primary-foreground font-heading font-medium text-xs md:text-sm hover:brightness-110 transition-all">
             Report
           </Link>
           {user ? (
