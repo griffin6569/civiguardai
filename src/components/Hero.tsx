@@ -79,6 +79,12 @@ const Hero = () => {
               View Evidence Map
             </span>
           </Link>
+          <Link to="/register-organization" className="px-8 py-3.5 rounded-lg border border-primary/50 bg-primary/10 text-primary font-heading font-medium text-lg hover:bg-primary/20 transition-all backdrop-blur-sm">
+            <span className="flex items-center gap-2">
+              <Shield className="w-5 h-5" />
+              Register Authority
+            </span>
+          </Link>
         </motion.div>
 
         <motion.div
