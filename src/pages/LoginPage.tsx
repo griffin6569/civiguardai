@@ -12,6 +12,7 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const claimReportId = searchParams.get("claim_report");
 
